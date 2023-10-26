@@ -30,13 +30,13 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
   <xacro:arg name="robot_namespace" default="/" />
   <xacro:arg name="urdf_extras" default="empty.urdf" />
+  `<xacro:arg name="transmission_hw_interface" default="hardware_interface/EffortJointInterface"/>
 
   <!-- Included URDF/XACRO Files -->
   <xacro:include filename="$(find husky_dual_ur5_description)/urdf/decorations.urdf.xacro" />
   <xacro:include filename="$(find husky_description)/urdf/wheel.urdf.xacro" />
   <xacro:include filename="$(find husky_description)/urdf/accessories/sick_lms1xx_mount.urdf.xacro"/>
-  <xacro:include filename="$(find ur_description)/urdf/ur5.urdf.xacro" />
-
+  <xacro:include filename="$(find ur_description)/urdf/ur5_d435.urdf.xacro" />
   <xacro:property name="M_PI" value="3.14159"/>
 
   <!-- Base Size -->
@@ -62,7 +62,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
       </geometry>
     </visual>
     <collision>
-      <origin xyz="${( husky_front_bumper_extend - husky_rear_bumper_extend ) / 2.0} 0 ${base_z_size/4}" rpy="0 0 0" />
+      <origin xyz="${( husky_front_bumper_extend - husky_rear_bumper_extend ) / 2.0} 0.0 ${base_z_size/4}" rpy="0 0 0" />
       <geometry>
         <box size="${ base_x_size + husky_front_bumper_extend + husky_rear_bumper_extend } ${base_y_size} ${base_z_size/2}"/>
       </geometry>
@@ -87,14 +87,15 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <!-- Interial link stores the robot's inertial information --> 
   <link name="inertial_link">
     <inertial>
-      <mass value="46.034"/>
-      <origin xyz="-0.00065 -0.085 0.062" />
+      <mass value="46"/>
+      <origin xyz="-0.00065 0.0 0.1" />
+      <!--origin xyz="-0.05 0 0.17" /-->
       <inertia ixx="0.6022" ixy="-0.02364" ixz="-0.1197" iyy="1.7386" iyz="-0.001544" izz="2.0296" />
     </inertial>
   </link>
 
   <joint name="inertial_joint" type="fixed">
-    <origin xyz="0 0 0" rpy="0 0 0" />
+    <origin xyz="0 0 0.0" rpy="0 0.2 0" />
     <parent link="base_link" />
     <child link="inertial_link" />
   </joint> 
@@ -126,6 +127,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
   <xacro:husky_decorate />
   <xacro:ur5_robot prefix="l_ur5_arm_" joint_limited="true"/>
+    
   <xacro:ur5_robot prefix="r_ur5_arm_" joint_limited="true"/> 
 
   <xacro:sick_lms1xx_mount prefix="base"/>
